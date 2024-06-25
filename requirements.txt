@@ -1,20 +1,26 @@
 altair==5.3.0
 attrs==23.2.0
 beautifulsoup4==4.12.3
+blessed==1.20.0
 blinker==1.8.2
+bpython==0.24
 cachetools==5.3.3
 certifi==2024.6.2
 charset-normalizer==3.3.2
 click==8.1.7
 contourpy==1.2.1
+curtsies==0.4.2
+cwcwidth==0.1.9
 cycler==0.12.1
 duckdb==1.0.0
 entrypoints==0.4
 Faker==25.9.1
 favicon==0.7.0
+fire==0.6.0
 fonttools==4.53.0
 gitdb==4.0.11
 GitPython==3.1.43
+greenlet==3.0.3
 htbuilder==0.6.2
 idna==3.7
 Jinja2==3.1.4
@@ -42,6 +48,7 @@ pymdown-extensions==10.8.1
 pyparsing==3.1.2
 python-dateutil==2.9.0.post0
 pytz==2024.1
+pyxdg==0.28
 PyYAML==6.0.1
 referencing==0.35.1
 requests==2.32.3
@@ -64,6 +71,7 @@ streamlit-shadcn-ui==0.1.18
 streamlit-toggle-switch==1.0.2
 streamlit-vertical-slider==2.5.5
 tenacity==8.4.1
+termcolor==2.4.0
 toml==0.10.2
 toolz==0.12.1
 tornado==6.4.1
@@ -72,3 +80,4 @@ tzdata==2024.1
 urllib3==2.2.2
 validators==0.28.3
 watchdog==4.0.1
+wcwidth==0.2.13
