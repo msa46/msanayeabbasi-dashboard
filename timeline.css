@@ -1,0 +1,34 @@
+.App {
+    font-family: sans-serif;
+    text-align: center;
+  }
+  .vis-timeline {
+    border: 2px solid purple;
+    font-family: purisa, "comic sans", cursive;
+    font-size: 12pt;
+    background: #CDD6DD;
+  }
+  
+  .vis-item {
+    border-color: #CCFBFE !important;
+    background-color: #C0C0C0 !important;
+    color: black !important;
+    box-shadow: 5px 5px 20px rgba(128, 128, 128, 0.5);
+  }
+
+  .vis-item-content {
+    background-color: #defafc;
+    border-radius: 4px;
+
+  }
+
+  .vis-selected > .vis-item-content {
+    border-color: #ec590a !important;
+    background-color: #da8659 !important;
+  }
+
+
+  .vis-item.vis-selected  {
+    border-color: #ec590a !important;
+    background-color: #EA580C !important;
+  }
