@@ -4,15 +4,31 @@ import numpy as np
 import pandas as pd
 import seaborn as sns
 import duckdb
+import matplotlib as mpl
 
-import matplotlib.cm
 from streamlit_timeline import st_timeline
+
+
+from matplotlib.cm import ScalarMappable
+from matplotlib.lines import Line2D
+from mpl_toolkits.axes_grid1.inset_locator import inset_axes
+from textwrap import wrap
+from matplotlib.colors import ListedColormap
+
 
 st.set_page_config(layout="wide")
 
 
 con = duckdb.connect(database = "./data/my-db.db", read_only = False)
 
+aggregate_string = """
+                                   avg(rage) AS rage, 
+                                   avg(physical) AS physical, 
+                                   avg(creativity) AS creativity, 
+                                   avg(focus) AS focus, 
+                                   avg(drive) AS drive,
+                                   avg(resilience) AS resilience
+                    """
 
 events_rel = con.sql("SELECT * FROM events").set_alias("events_rel")
 events_df = events_rel.df()
@@ -21,6 +37,9 @@ events_df['date'] = events_df['date'].dt.strftime('%Y-%m-%d')
 
 attrs_rel = con.sql("SELECT * FROM attributes").set_alias("attrs_rel")
 attrs_joined = events_rel.join(attrs_rel, "events_rel.id = attrs_rel.event_id")
+attrs_filtered = attrs_joined.filter("date BETWEEN %s AND %s" % ("'2021-01-1'", "'2023-01-01'"))
+attrs_avg_df_overall = attrs_joined.aggregate(aggregate_string).df()
+attrs_avg_df = attrs_filtered.aggregate(aggregate_string).df()
 
 skills_joined = con.execute("""WITH ranked_skills AS ( 
                            SELECT s.id, s.name, s.level, e.date, ROW_NUMBER() OVER (PARTITION BY s.name ORDER BY e.date DESC) AS rn 
@@ -50,6 +69,22 @@ matrix = skills_joined['level_num'].values.reshape(5, 5)
 
 
 
+def get_color(attribute, value):
+    if attribute == 'rage':
+        if value < 20:
+            return '#FF2400'
+        elif value > 80:
+            return '#CC0000'
+        else:
+            return '#B7410E'
+    else:
+        if value < 20:
+            return colors[0]
+        elif value > 60:
+            return colors[1]
+        else:
+            return colors[2]
+
 events_list = []
 
 for event in  events_df.values.tolist():
@@ -57,16 +92,26 @@ for event in  events_df.values.tolist():
 
 
 
+colors = ['#EA580C', '#CCFBFE', '#CDD6DD', '#CDCACC', '#3D405B']
+
+custom_cmap = ListedColormap(colors)
+
+cmap = mpl.colors.LinearSegmentedColormap.from_list("my color", colors, N=256)
+
+norm = mpl.colors.Normalize(vmin=5, vmax=5)
+
+# colors_normalized = cmap(norm())
+
 
 cmap = plt.cm.get_cmap('flare', 5)  # 5 discrete colors
 
 
 fig, ax = plt.subplots(figsize=(6, 5))
 
-sns.heatmap(matrix, annot=False, cmap=cmap, cbar=False, ax=ax)
+sns.heatmap(matrix, annot=False, cmap=custom_cmap, cbar=False, ax=ax)
 
 
-sm = plt.cm.ScalarMappable(cmap=cmap, norm=plt.Normalize(vmin=0.5, vmax=5.5))
+sm = plt.cm.ScalarMappable(cmap=custom_cmap, norm=plt.Normalize(vmin=0.5, vmax=5.5))
 sm.set_array([])
 cbar = plt.colorbar(sm, ax=ax, ticks=[1, 2, 3, 4, 5])
 cbar.set_ticklabels(['Beginner', 'Advanced Beginner', 'Competent', 'Proficient', 'Expert'])
@@ -85,7 +130,50 @@ plt.title('Skills Level')
 ax.set_xticks([])
 ax.set_yticks([])
 
-# st.pyplot(fig)
+
+## Variable setup for attrs
+num_attributes = len(attrs_avg_df.columns)
+
+
+
+angles = np.linspace(0, 2 * np.pi, num_attributes, endpoint=False).tolist()
+values = attrs_avg_df.values.tolist()[0]
+values_avg = attrs_avg_df_overall.values.tolist()[0]
+bar_colors = [get_color(attr, value) for attr, value in zip(attrs_avg_df.columns.tolist(), values)]
+values += values[:1]
+values_avg += values_avg[:1]
+angles += angles[:1]
+
+
+
+
+
+
+
+radarFig, radarAx = plt.subplots(figsize=(9, 6), subplot_kw={"projection": "polar"})
+
+radarFig.patch.set_facecolor("white")
+radarAx.set_facecolor("white")
+
+
+
+# radarAx.set_theta_offset(1.2 * np.pi / 2)
+radarAx.set_ylim(0, 100)
+
+
+radarAx.bar(angles, values, color=bar_colors, bottom=20, alpha=0.9, width=0.9, zorder=10)
+radarAx.vlines(angles, 0, 100, color='grey', ls=(0, (4, 4)), zorder=11)
+radarAx.scatter(angles, values_avg, s=60, color="#1f1f1f", zorder=11)
+
+
+radarAx.set_yticklabels([])
+radarAx.set_xticks(angles[:-1])
+
+
+regions = ["\n".join(wrap(r, 5, break_long_words=False)) for r in attrs_avg_df.columns]
+radarAx.set_xticklabels(regions)
+
+
 
 
 col1, col2, col3, = st.columns([1, 2, 1])
@@ -93,7 +181,7 @@ with col2:
     st.write("## My timeline")
     timeline = st_timeline(events_list, groups=[], options={}, style='timeline.css', height="300px")
     st.pyplot(fig)
-
+    st.pyplot(radarFig)
 
 # st.subheader("event")
 
