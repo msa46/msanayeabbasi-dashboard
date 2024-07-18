@@ -32,7 +32,7 @@ Markdown==3.6
 markdown-it-py==3.0.0
 markdownlit==0.0.7
 MarkupSafe==2.1.5
-matplotlib==3.9.0
+matplotlib==3.8.4
 mdurl==0.1.2
 more-itertools==10.3.0
 numpy==2.0.0
@@ -54,11 +54,13 @@ referencing==0.35.1
 requests==2.32.3
 rich==13.7.1
 rpds-py==0.18.1
+seaborn==0.13.2
 six==1.16.0
 smmap==5.0.1
 soupsieve==2.5
 st-annotated-text==4.0.1
 st-theme==1.2.3
+st-wordcloud==0.0.7
 streamlit==1.36.0
 streamlit-camera-input-live==0.2.0
 streamlit-card==1.0.2
@@ -70,6 +72,7 @@ streamlit-keyup==0.2.4
 streamlit-shadcn-ui==0.1.18
 streamlit-toggle-switch==1.0.2
 streamlit-vertical-slider==2.5.5
+streamlit-vis-timeline==0.3.0
 tenacity==8.4.1
 termcolor==2.4.0
 toml==0.10.2
