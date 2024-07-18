@@ -100,7 +100,9 @@ with col2:
 
 
     st.write("## My timeline")
-    timeline = st_timeline(events_list, groups=[], options={}, style='timeline.css', height="300px")
+    # timeline = st_timeline(events_list, groups=[], options={}, style='timeline.css', height="300px")
+    timeline = st_timeline(events_list, groups=[], options={}, height="300px")
+
     
 
     colors = ['#EA580C', '#CCFBFE', '#CDD6DD', '#CDCACC', '#3D405B']
@@ -118,7 +120,6 @@ with col2:
 
 
     fig, ax = plt.subplots(figsize=(6, 5))
-    print("matrix is: ", matrix)
     sns.heatmap(matrix, annot=False, cmap=custom_cmap, cbar=False, ax=ax)
 
 
@@ -172,7 +173,6 @@ with col2:
     # radarAx.set_theta_offset(1.2 * np.pi / 2)
     radarAx.set_ylim(0, 100)
 
-    print("values are:", values)
     radarAx.bar(angles, values, color=bar_colors, bottom=20, alpha=0.9, width=0.9, zorder=10)
     radarAx.vlines(angles, 0, 100, color='grey', ls=(0, (4, 4)), zorder=11)
     radarAx.scatter(angles, values_avg, s=60, color="#1f1f1f", zorder=11)
