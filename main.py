@@ -99,8 +99,8 @@ with col2:
         events_list.append({"start": event[1], "content": event[2]})
 
 
-    # st.write("## My timeline")
-    # timeline = st_timeline(events_list, groups=[], options={}, style='timeline.css', height="300px")
+    st.write("## My timeline")
+    timeline = st_timeline(events_list, groups=[], options={}, style='timeline.css', height="300px")
     # timeline = st_timeline(events_list, groups=[], options={}, height="300px")
 
     
