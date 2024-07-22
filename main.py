@@ -38,6 +38,9 @@ st.markdown(f"""
             body* {{
                 font-family: serif;
             }}
+            .stDeployButton {{
+                visibility: hidden;
+            }}
             img{{
                 border-radius: 6px;
             }}
@@ -49,7 +52,8 @@ plt.rcParams["font.family"] = "serif"
 
 col1, col2, col3, = st.columns([1, 2, 1])
 with col2:
-    year = ui.select(options=["2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2014", "2012"])
+    # year = ui.select(options=["2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2014", "2012"])
+    year = st.selectbox("",options=["2024", "2023", "2022", "2021", "2020", "2019", "2018", "2017", "2016", "2014", "2012"])
     events_rel = con.sql("SELECT * FROM events").set_alias("events_rel")
     events_rel_filtered = events_rel.filter("date <= %s" % "'%s-01-01'" % str(int(year) + 1))
     events_df = events_rel.df()
@@ -112,7 +116,11 @@ with col2:
         events_list.append({"start": event[1], "content": event[2]})
 
 
-    st.write("## My timeline")
+    # st.write("## My timeline")
+    timeline_expander = st.expander("## Timeline")
+    timeline_expander.write('''
+                            My timeline. These moments are the "peaks" of my life. 
+                            ''')
     timeline = st_timeline(events_list, groups=[], options={}, style='timeline.css', height="300px")
     # timeline = st_timeline(events_list, groups=[], options={}, height="300px")
 
@@ -150,11 +158,14 @@ with col2:
                 ax.text(j + 0.5, i + 0.5, skills_joined.iloc[idx]['name'], 
                         ha='center', va='center', fontsize=8)
 
-    plt.title('Skills Level')
+    # plt.title('Skills Level')
 
     ax.set_xticks([])
     ax.set_yticks([])
-
+    heatmap_expander = st.expander("Skill levels")
+    heatmap_expander.write('''
+                           The accumulation of my skills through time. The levels are also listed. Only the last 25 skills are shown.
+                           ''')
     st.pyplot(fig)
     ## Variable setup for attrs
     num_attributes = len(attrs_avg_df.columns)
@@ -199,7 +210,11 @@ with col2:
 
 
 
-
+    radial_expander = st.expander("Attributes")
+    radial_expander.write('''
+                          A collective list of my attributes through out time. The rating is pretty arbitrary but I feel are fairly accurate if not looked
+                          at as numbers & more as levels.
+                          ''')
     st.pyplot(radarFig)
 
    
