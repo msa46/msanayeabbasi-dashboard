@@ -33,6 +33,19 @@ aggregate_string = """
                     """
 
 
+st.markdown(f"""
+            <style>
+            body* {{
+                font-family: serif;
+            }}
+            img{{
+                border-radius: 6px;
+            }}
+            </style>
+            """, unsafe_allow_html=True)
+
+
+plt.rcParams["font.family"] = "serif" 
 
 col1, col2, col3, = st.columns([1, 2, 1])
 with col2:
@@ -141,7 +154,6 @@ with col2:
 
     ax.set_xticks([])
     ax.set_yticks([])
-
 
     st.pyplot(fig)
     ## Variable setup for attrs

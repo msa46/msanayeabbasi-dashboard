@@ -4,9 +4,11 @@
   }
   .vis-timeline {
     border: 2px solid purple;
-    font-family: purisa, "comic sans", cursive;
+    /* font-family: purisa, "comic sans", cursive; */
+    font-family: serif;
     font-size: 12pt;
     background: #CDD6DD;
+    border-radius: 6px;
   }
   
   .vis-item {
